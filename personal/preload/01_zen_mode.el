@@ -47,7 +47,7 @@
   "zen-run-mode variable is to set state of whether zen mode is enabled in the current buffer"
   )
 
-(defvar-local zen-mode-margin-width (/ (/ (display-pixel-width) (/ (window-pixel-width) (window-width))) 5)
+(defvar-local zen-mode-margin-width 0
   "Zen mode option to specify the margin width."
   )
 
@@ -108,11 +108,12 @@
   "zen-run is a lisp function which activates and deactivates the zen-mode"
   (if zen-run-mode
       (progn
+	(setq zen-mode-margin-width 0)
         (message "Distraction free disabled")
-        (setq window-size-change-functions (remove 'zen-mode-refresh-buffer 'window-size-change-functions))
+        (setq window-size-change-functions (remove 'zen-mode-refresh-buffer window-size-change-functions))
 	(if zen-linum-state
 	    (linum-mode 1))
-
+	
 	(if zen-blink-cursor-state
           (blink-cursor-mode 1))
 
@@ -133,6 +134,7 @@
         (set-window-buffer nil (current-buffer))
         (setq zen-run-mode nil))
     (progn
+      (setq zen-mode-margin-width (/ (/ (display-pixel-width) (/ (window-pixel-width) (window-width))) 5))
       (if zen-mode-disable-mode-line
           (progn
             (setq zen-mode-line-cache mode-line-format)
@@ -155,7 +157,7 @@
       (setq zen-rf-state right-fringe-width)
 
       (setq zen-fullscreen-state (frame-parameter (selected-frame) 'fullscreen))
-
+      
       (message "Distraction free enabled")
       (add-to-list 'window-size-change-functions 'zen-mode-refresh-buffer)
       (set-frame-parameter nil 'fullscreen 'fullboth)
@@ -191,9 +193,11 @@
 
 (defun zen-mode-refresh-buffer(frame)
   "zen-mode-refresh-buffer is a lisp function to refresh the buffer's margin width when window is resized"
-  (setq zen-mode-margin-width (/ (/ (display-pixel-width) (/ (window-pixel-width) (window-width))) 5))
-  (zen-mode-set-margins)
-  )
+  (if (bound-and-true-p zen-mode)
+      (progn
+	(message (format "Running for %s" (current-buffer)))
+	(setq-local zen-mode-margin-width (/ (/ (display-pixel-width) (/ (window-pixel-width) (window-width))) 5))
+	(zen-mode-set-margins))))
 
 (provide 'zen-mode)
 

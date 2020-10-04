@@ -8,10 +8,12 @@
 (prelude-require-package 'atom-one-dark-theme)
 
 
-;; remove scrollbar(scroll-bar-mode -1)
-(when (display-graphic-p)
-  (setq scroll-bar-mode -1)
-  )
+;; Keep things simple
+(menu-bar-mode -1)
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+(toggle-full-screen)
+
 
 ;; swap super and meta to bind meta to command on mac
 (setq mac-command-modifier 'meta)
