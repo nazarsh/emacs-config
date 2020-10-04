@@ -7,13 +7,11 @@
 (prelude-require-package 'lsp-treemacs)
 (prelude-require-package 'atom-one-dark-theme)
 
-
 ;; Keep things simple
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
-(toggle-full-screen)
-
+(set-frame-parameter nil 'fullscreen 'fullboth)
 
 ;; swap super and meta to bind meta to command on mac
 (setq mac-command-modifier 'meta)
@@ -24,9 +22,7 @@
 (global-set-key (kbd "C-M-z") 'zen-mode)
 
 ;; load atom-one-dark on startup
-(when (display-graphic-p)
-  (load-theme 'atom-one-dark t)
-  )
+(load-theme 'atom-one-dark t)
 
 ;; set line spacing
 (setq-default line-spacing 0.4)
